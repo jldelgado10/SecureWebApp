@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Web;
 using SecureWebApp.Data;
 using SecureWebApp.Services;
 using System;
@@ -45,6 +47,10 @@ namespace SecureWebApp
                 Configuration["EmailSender:UserName"],
                 Configuration["EmailSender:Password"]
             ));
+            services.AddAuthentication().AddMicrosoftAccount(options => {
+                options.ClientId = Configuration["Authentication:Microsoft:ClientId"];
+                options.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+            });
 
             services.Configure<IdentityOptions>(options =>
             {
